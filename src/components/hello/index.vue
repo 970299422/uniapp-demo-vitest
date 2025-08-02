@@ -1,18 +1,54 @@
 <template>
   <view class="hello">
-    <image class="logo" src="/static/logo.png" />
+    <image class="logo" :src="logoSrc" />
     <view class="text-area">
       <text class="title">{{ title }}</text>
     </view>
-    <view class="scss-title">这是scss 全局变量的样式</view>
-    <view class="less-title">这是less 全局变量的样式</view>
+    <view v-if="showScssTitle" class="scss-title">{{ scssTitle }}</view>
+    <view v-if="showLessTitle" class="less-title">{{ lessTitle }}</view>
+    <view class="code-area" v-if="code">
+      <text>验证码: {{ code }}</text>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { userApi } from '@/api'
 
-const title = ref('Hello')
+interface Props {
+  title: string
+  logoSrc?: string
+  scssTitle?: string
+  lessTitle?: string
+  showScssTitle?: boolean
+  showLessTitle?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  logoSrc: '/static/logo.png',
+  scssTitle: '这是scss 全局变量的样式',
+  lessTitle: '这是less 全局变量的样式',
+  showScssTitle: true,
+  showLessTitle: true
+})
+
+const code = ref<number | null>(null)
+
+async function getVerifyCode(phone: string) {
+  try {
+    const res = await userApi.getCode(phone)
+    code.value = res.num
+    return res.num
+  } catch (error) {
+    console.error('获取验证码失败:', error)
+    return null
+  }
+}
+
+defineExpose({
+  getVerifyCode
+})
 </script>
 
 <style scoped>
@@ -40,6 +76,12 @@ const title = ref('Hello')
 .title {
   font-size: 36rpx;
   color: #8f8f94;
+}
+
+.code-area {
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  color: #333;
 }
 </style>
 

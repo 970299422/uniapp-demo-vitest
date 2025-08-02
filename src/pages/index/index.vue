@@ -1,6 +1,6 @@
 <template>
   <view class="index-page">
-    <Hello />
+    <Hello title="hello" />
     <UnoCss />
     <text class="h2"> 查看其它页面示例↓ </text>
     <view>
