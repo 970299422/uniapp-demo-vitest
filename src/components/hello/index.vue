@@ -2,6 +2,9 @@
   <view class="hello">
     <image class="logo" :src="logoSrc" />
     <view class="text-area">
+      <button class="btn" @click="() => getVerifyCode('13800138000')">getVerifyCode</button>
+    </view>
+    <view class="text-area">
       <text class="title">{{ title }}</text>
     </view>
     <view v-if="showScssTitle" class="scss-title">{{ scssTitle }}</view>
@@ -9,6 +12,7 @@
     <view class="code-area" v-if="code">
       <text>验证码: {{ code }}</text>
     </view>
+    
   </view>
 </template>
 

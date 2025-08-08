@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, flushPromises } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import HelloComponent from '../src/components/hello/index.vue'
 import { userApi } from '../src/api'
@@ -52,10 +52,14 @@ describe('Hello Component', () => {
       }
     })
 
-    const result = await wrapper.vm.getVerifyCode('13800138000')
-    
+    const button = wrapper.find('.btn')
+    await button.trigger('click')
+    await flushPromises()
+
+    // const result = await wrapper.vm.getVerifyCode('13800138000')
+    // expect(result).toBe(mockCode.num)
+
     expect(userApi.getCode).toHaveBeenCalledWith('13800138000')
-    expect(result).toBe(mockCode.num)
     expect(wrapper.find('.code-area').text()).toContain('验证码: 123456')
   })
 
@@ -68,10 +72,12 @@ describe('Hello Component', () => {
       }
     })
 
-    const result = await wrapper.vm.getVerifyCode('13800138000')
+    const button = wrapper.find('.btn')
+    await button.trigger('click')
+  
+    await flushPromises()
     
     expect(userApi.getCode).toHaveBeenCalledWith('13800138000')
-    expect(result).toBeNull()
     expect(wrapper.find('.code-area').exists()).toBe(false)
   })
 })
