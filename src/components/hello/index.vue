@@ -45,7 +45,7 @@ async function getVerifyCode(phone: string) {
     code.value = res.num
     return res.num
   } catch (error) {
-    console.error('获取验证码失败:', error)
+    console.error('获取验证码失败:')
     return null
   }
 }
